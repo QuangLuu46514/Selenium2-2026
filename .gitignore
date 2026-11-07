@@ -1,0 +1,15 @@
+# Build output
+target/
+*.class
+# Test results - generated on every run, never commit
+reports/
+test-output/
+*.log
+screenshots/
+# IDE
+.idea/
+*.iml
+.vscode/
+.settings/
+.project
+.classpath

@@ -1,17 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 
-<suite name="railway Automation Test Suite" verbose="1"
-	parallel="methods" thread-count="1">
+<suite name="Automation Exercise Test Suite" verbose="1"
+       parallel="methods" thread-count="1">
 
-	<test name="Test">
-		<parameter name="browser" value="firefox" />
-		<classes>
-			<class name="automationexercise.ProductReviewTest">
-				<methods>
-					<include name="TC01" />
-				</methods>
-			</class>
-		</classes>
-	</test>
+    <listeners>
+        <listener class-name="core.listeners.TestListener"/>
+    </listeners>
+
+    <test name="Test">
+        <parameter name="browser" value="firefox"/>
+        <classes>
+            <class name="railway.ProductReviewTest">
+                <methods>
+                    <include name="TC01"/>
+                </methods>
+            </class>
+        </classes>
+    </test>
 </suite>
