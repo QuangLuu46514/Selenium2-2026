@@ -51,13 +51,22 @@ public class Locator {
         return new Locator(LocatorType.PARTIAL_LINK_TEXT, text);
     }
 
-    /** Dynamic XPath: fills the %s placeholders, e.g. dynamicXpath("//a[@data-nav='%s']", "products"). */
+    /**
+     * Dynamic XPath: fills the %s placeholders, e.g. dynamicXpath("//a[@data-nav='%s']", "products").
+     */
     public static Locator dynamicXpath(String xpathTemplate, Object... values) {
         return xpath(String.format(xpathTemplate, values));
     }
 
-    /** The Selenium By used to find the element. */
+    /**
+     * The Selenium By used to find the element.
+     */
     public By getBy() {
         return type.toBy(value);
+    }
+
+    @Override
+    public String toString() {
+        return type + "=" + value;
     }
 }

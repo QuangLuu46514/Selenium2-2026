@@ -3,14 +3,15 @@ package core.element;
 import core.common.constant.TimeoutConstants;
 import core.driver.DriverManager;
 import core.enums.LocatorType;
-import org.openqa.selenium.By;
-import org.openqa.selenium.TimeoutException;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import lombok.extern.slf4j.Slf4j;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
+import java.util.List;
 import java.util.function.Function;
 
 /**
@@ -18,7 +19,7 @@ import java.util.function.Function;
  * The WebElement is looked up lazily (on every action) from the current thread's driver,
  * so an Element can be declared once in a page object and reused safely in parallel runs.
  */
-
+@Slf4j
 public class Element {
     private final Locator locator;
     private final String name;
@@ -78,4 +79,170 @@ public class Element {
     private WebElement findClickableElement() {
         return waitFor(ExpectedConditions.elementToBeClickable(getBy()), TimeoutConstants.WAIT_TIMEOUT, "clickable");
     }
+
+    // ------------------------------------------------------- public wait API
+
+    public Element waitUntilPresent() {
+        return waitUntilPresent(TimeoutConstants.WAIT_TIMEOUT);
+    }
+
+    public Element waitUntilPresent(Duration timeout) {
+        waitFor(ExpectedConditions.presenceOfElementLocated(getBy()), timeout, "present");
+        return this;
+    }
+
+    public Element waitUntilVisible() {
+        return waitUntilVisible(TimeoutConstants.WAIT_TIMEOUT);
+    }
+
+    public Element waitUntilVisible(Duration timeout) {
+        waitFor(ExpectedConditions.visibilityOfElementLocated(getBy()), timeout, "visible");
+        return this;
+    }
+
+    public Element waitUntilClickable() {
+        return waitUntilClickable(TimeoutConstants.WAIT_TIMEOUT);
+    }
+
+    public Element waitUntilClickable(Duration timeout) {
+        waitFor(ExpectedConditions.elementToBeClickable(getBy()), timeout, "clickable");
+        return this;
+    }
+
+    public Element waitUntilInvisible() {
+        return waitUntilInvisible(TimeoutConstants.WAIT_TIMEOUT);
+    }
+
+    public Element waitUntilInvisible(Duration timeout) {
+        waitFor(ExpectedConditions.invisibilityOfElementLocated(getBy()), timeout, "invisible");
+        return this;
+    }
+
+    public Element waitUntilTextContains(String text) {
+        return waitUntilTextContains(text, TimeoutConstants.WAIT_TIMEOUT);
+    }
+
+    public Element waitUntilTextContains(String text, Duration timeout) {
+        waitFor(ExpectedConditions.textToBePresentInElementLocated(getBy(), text), timeout,
+                "containing text '" + text + "'");
+        return this;
+    }
+
+    // ---------------------------------------------------------------- actions
+
+    public Element click() {
+        log.info("Click [{}]", name);
+        findClickableElement().click();
+        return this;
+    }
+
+    /**
+     * Clears the input field and enters the provided text.
+     */
+    public Element type(String text) {
+        log.info("Type '{}' into [{}]", text, name);
+        WebElement element = findVisibleElement();
+        element.clear();
+        element.sendKeys(text);
+        return this;
+    }
+
+    /**
+     * Sends keys without clearing (e.g. Keys.ENTER).
+     */
+    public Element sendKeys(CharSequence... keys) {
+        log.info("Send keys to [{}]", name);
+        findVisibleElement().sendKeys(keys);
+        return this;
+    }
+
+    public String getText() {
+        return findVisibleElement().getText().trim();
+    }
+
+    /**
+     * Reads an HTML attribute as written in the DOM, e.g. getAttribute("href").
+     */
+    public String getAttribute(String attributeName) {
+        return findPresentElement().getDomAttribute(attributeName);
+    }
+
+    public Element selectByVisibleText(String text) {
+        log.info("Select '{}' in [{}]", text, name);
+        new Select(findVisibleElement()).selectByVisibleText(text);
+        return this;
+    }
+
+    public String getSelectedText() {
+        return new Select(findVisibleElement()).getFirstSelectedOption().getText().trim();
+    }
+
+    public Element scrollIntoView() {
+        log.info("Scroll into view [{}]", name);
+        ((JavascriptExecutor) driver()).executeScript(
+                "arguments[0].scrollIntoView({block: 'center'});", findPresentElement());
+        return this;
+    }
+
+    public Element hover() {
+        log.info("Hover [{}]", name);
+        new Actions(driver()).moveToElement(findVisibleElement()).perform();
+        return this;
+    }
+
+    /**
+     * Click via JavaScript when the element is covered by an overlay or an ad banner.
+     */
+    public Element jsClick() {
+        log.info("JS click [{}]", name);
+        ((JavascriptExecutor) driver()).executeScript("arguments[0].click();", findPresentElement());
+        return this;
+    }
+
+    // ------------------------------------------------------------------ state
+
+    /**
+     * Checks immediately, never throws.
+     */
+    public boolean isDisplayed() {
+        try {
+            List<WebElement> found = driver().findElements(getBy());
+            return !found.isEmpty() && found.getFirst().isDisplayed();
+        } catch (WebDriverException e) {
+            return false;
+        }
+    }
+
+    /**
+     * Waits up to timeout for the element to become visible, never throws.
+     */
+    public boolean isDisplayed(Duration timeout) {
+        try {
+            waitUntilVisible(timeout);
+            return true;
+        } catch (WebDriverException e) {
+            return false;
+        }
+    }
+
+    public boolean isEnabled() {
+        return findPresentElement().isEnabled();
+    }
+
+    public boolean isSelected() {
+        return findPresentElement().isSelected();
+    }
+
+    /**
+     * Number of matching elements right now (0 if none).
+     */
+    public int count() {
+        return driver().findElements(getBy()).size();
+    }
+
+    @Override
+    public String toString() {
+        return name + " (" + locator + ")";
+    }
 }
+
