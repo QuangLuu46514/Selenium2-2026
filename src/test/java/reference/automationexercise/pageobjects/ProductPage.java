@@ -1,4 +1,4 @@
-package pageobjects.automationexercise.railway;
+package reference.automationexercise.pageobjects;
 
 import common.Utilities;
 

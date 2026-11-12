@@ -1,11 +1,11 @@
-package pageobjects.automationexercise.railway;
+package reference.automationexercise.pageobjects;
 
 import core.driver.Browser;
 import org.openqa.selenium.By;
 
 import common.Random;
 import common.Utilities;
-import constant.Constant;
+import reference.automationexercise.constant.AutomationExerciseConstant;
 
 public class HomePage extends GeneralPage{
 
@@ -17,12 +17,12 @@ public class HomePage extends GeneralPage{
 
 	// Methods
 	public HomePage open() {
-		Browser.navigateTo(Constant.AUTOMATION_EXERCISE);
+		Browser.navigateTo(AutomationExerciseConstant.AUTOMATION_EXERCISE);
 		return this;
 	}
 	
 	public void addProductToCart() {
-		int indexRandom = Random.randomNumber(Constant.MIN_INDEX_PRODUCT, Constant.MAX_INDEX_PRODUCT);
+		int indexRandom = Random.randomNumber(AutomationExerciseConstant.MIN_INDEX_PRODUCT, AutomationExerciseConstant.MAX_INDEX_PRODUCT);
 		String indexStr = String.valueOf(indexRandom);
         // Variables
         Utilities.hover(Utilities.getLocatorElement(_productXpath, indexStr));

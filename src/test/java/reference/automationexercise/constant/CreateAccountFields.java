@@ -1,4 +1,4 @@
-package constant;
+package reference.automationexercise.constant;
 
 public enum CreateAccountFields {
 	PASSWORD("password"),

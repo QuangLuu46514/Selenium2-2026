@@ -1,4 +1,4 @@
-package railway;
+package testarchitecttraining;
 
 import core.driver.DriverManager;
 import core.listeners.TestListener;

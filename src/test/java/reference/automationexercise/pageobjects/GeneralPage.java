@@ -1,8 +1,8 @@
-package pageobjects.automationexercise.railway;
+package reference.automationexercise.pageobjects;
 
 
 import common.Utilities;
-import constant.Menu;
+import reference.automationexercise.constant.Menu;
 
 
 public class GeneralPage {

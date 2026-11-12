@@ -1,9 +1,9 @@
-package pageobjects.automationexercise.railway;
+package reference.automationexercise.pageobjects;
 
 import org.openqa.selenium.By;
 
 import common.Utilities;
-import constant.CreateAccountFields;
+import reference.automationexercise.constant.CreateAccountFields;
 
 public class SignUpPage extends GeneralPage {
 
