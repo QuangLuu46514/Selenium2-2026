@@ -1,5 +1,7 @@
 package utils;
 
+import constant.Constant;
+
 /**
  * Creates NEW test data on every call.
  *
@@ -8,16 +10,15 @@ package utils;
  * try to register the same account.
  */
 
-public class DataFactory {
+public final class DataFactory {
 
     private static final String LETTERS = "abcdefghijklmnopqrstuvwxyz";
     private static final String LETTERS_AND_DIGITS = LETTERS + "0123456789";
-
 
     /**
      * Example: qluuknguyen_1731345678901@pokemail.net
      */
     public static String randomEmail() {
-    return "qluuknguyen" + System.currentTimeMillis() + "@";
+        return "qluuknguyen" + System.currentTimeMillis() + "@" + Constant.MAIL_DOMAIN;
     }
 }

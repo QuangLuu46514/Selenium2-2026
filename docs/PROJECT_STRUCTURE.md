@@ -37,7 +37,7 @@ Selenium/
 │       │   │   └── guerrillamail/       → GurreillamailPage
 │       │   ├── testcases/
 │       │   │   └── automationexercise/  → TestBase, ProductReviewTest, RegistrationAddressTest
-│       │   ├── businessflow/       ← (đang trống – dự kiến chứa các flow nghiệp vụ)
+│       │   ├── flows/       ← (đang trống – dự kiến chứa các flow nghiệp vụ)
 │       │   └── dataobjects/        ← (đang trống – dự kiến chứa model dữ liệu test)
 │       └── resources/
 │           ├── config.properties   ← Cấu hình chạy (browser, headless, local/remote…)
@@ -238,7 +238,7 @@ Nhiều method **trả về Page tiếp theo** (ví dụ `signUp()` → `SignUpP
 > 💡 `alwaysRun = true`: `@AfterMethod` vẫn chạy kể cả khi test fail/exception → browser luôn được đóng.
 
 ### 5.5 `businessflow/` và `dataobjects/` (đang trống)
-- **businessflow**: gom nhiều bước của nhiều page thành 1 flow nghiệp vụ (vd `RegisterFlow.registerNewUser(user)`) để test ngắn hơn và tái sử dụng.
+- **flows**: gom nhiều bước của nhiều page thành 1 flow nghiệp vụ (vd `RegisterFlow.registerNewUser(user)`) để test ngắn hơn và tái sử dụng.
 - **dataobjects**: class mô tả dữ liệu (vd `User { name, email, password, address… }`) thay vì truyền 8 tham số rời rạc như `creatNewAccount(...)` hiện nay.
 
 ---
